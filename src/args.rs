@@ -1,33 +1,19 @@
-use std::env;
+use std::{env, error::Error};
 
-pub fn parse_filename() -> String {
+pub fn parse_filename() -> Result<String, Box<dyn Error>> {
     let args: Vec<String> = env::args().collect();
     let mut filename = None;
     let mut i = 1;
     while i < args.len() {
         match args[i].as_str() {
             "-c" => {
-                if i + 1 < args.len() {
-                    filename = Some(args[i + 1].clone());
-                    i += 2;
-                } else {
-                    eprintln!("Error: Missing value for -c");
-                    std::process::exit(1)
-                }
-            }
-            unknown => {
-                eprintln!("Error: Unknown argument '{}'", unknown);
-                std::process::exit(1)
-
-            }
+                let value = args.get(i+1).ok_or("missing value for -c")?;
+                filename = Some(value.clone());
+                i += 2;
+        },
+            unknown => return Err(format!("unknown argument `{unknown}`").into())
         }
     }
 
-    match filename {
-        Some(n) => n,
-        None => {
-            eprintln!("Error: Missing required argument -c");
-            std::process::exit(1)
-        }
-    }
+    filename.ok_or("missing required argument -c".into())
 }
