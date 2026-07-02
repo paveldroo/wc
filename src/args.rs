@@ -9,7 +9,7 @@ pub fn parse_filename() -> String {
             "-c" => {
                 if i + 1 < args.len() {
                     filename = Some(args[i + 1].clone());
-                    i = i + 2;
+                    i += 2;
                 } else {
                     eprintln!("Error: Missing value for -c");
                     std::process::exit(1)
@@ -23,13 +23,11 @@ pub fn parse_filename() -> String {
         }
     }
 
-    let filename = match filename {
+    match filename {
         Some(n) => n,
         None => {
             eprintln!("Error: Missing required argument -c");
             std::process::exit(1)
         }
-    };
-
-    filename
+    }
 }

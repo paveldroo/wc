@@ -1,8 +1,7 @@
 use std::{fs, path::PathBuf};
 
 pub fn get_test_data(filename: String) -> String {
-    let content = fs::read_to_string(get_fixture_path(filename)).expect("Failed to read tests.txt");
-    content
+    fs::read_to_string(get_fixture_path(filename)).expect("Failed to read tests.txt")
 }
 
 fn get_fixture_path(filename: String) -> PathBuf {
