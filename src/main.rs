@@ -6,6 +6,6 @@ fn main() {
     let content = input::get_test_data(filename.clone());
 
     let bytes_count = content.len();
-    println!("  {bytes_count:?} {filename}");
+    println!("  {bytes_count} {filename}");
     // dbg!(content);
 }
