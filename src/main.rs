@@ -1,3 +1,6 @@
+mod args;
+
 fn main() {
-    println!("Hello, world!");
+    let filename = args::parse_filename();
+    dbg!(filename);
 }
