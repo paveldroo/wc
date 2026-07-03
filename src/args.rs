@@ -7,11 +7,11 @@ pub fn parse_filename() -> Result<String, Box<dyn Error>> {
     while i < args.len() {
         match args[i].as_str() {
             "-c" => {
-                let value = args.get(i+1).ok_or("missing value for -c")?;
+                let value = args.get(i + 1).ok_or("missing value for -c")?;
                 filename = Some(value.clone());
                 i += 2;
-        },
-            unknown => return Err(format!("unknown argument `{unknown}`").into())
+            }
+            unknown => return Err(format!("unknown argument `{unknown}`").into()),
         }
     }
 
