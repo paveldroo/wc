@@ -1,36 +1,28 @@
 use assert_cmd::cargo::cargo_bin_cmd;
 
 #[test]
-fn bytes_len() -> Result<(), Box<dyn std::error::Error>> {
+fn bytes_len() {
     let mut cmd = cargo_bin_cmd!("ccwc");
     cmd.arg("-c").arg("test.txt");
-    cmd.assert().stdout("  342190 test.txt\n");
-
-    Ok(())
+    cmd.assert().success().stdout("  342190 test.txt\n");
 }
 
 #[test]
-fn no_filename() -> Result<(), Box<dyn std::error::Error>> {
+fn no_filename() {
     let mut cmd = cargo_bin_cmd!("ccwc");
     cmd.arg("-c");
-    cmd.assert().stderr("ccwc: missing value for -c\n");
-
-    Ok(())
+    cmd.assert().failure().stderr("ccwc: missing value for -c\n");
 }
 
 #[test]
-fn unknown_arg() -> Result<(), Box<dyn std::error::Error>> {
+fn unknown_arg() {
     let mut cmd = cargo_bin_cmd!("ccwc");
     cmd.arg("-d");
-    cmd.assert().stderr("ccwc: unknown argument `-d`\n");
-
-    Ok(())
+    cmd.assert().failure().stderr("ccwc: unknown argument `-d`\n");
 }
 
 #[test]
-fn no_args() -> Result<(), Box<dyn std::error::Error>> {
+fn no_args() {
     let mut cmd = cargo_bin_cmd!("ccwc");
-    cmd.assert().stderr("ccwc: missing required argument -c\n");
-
-    Ok(())
+    cmd.assert().failure().stderr("ccwc: missing required argument -c\n");
 }
