@@ -11,7 +11,7 @@ fn main() {
 }
 
 fn run() -> Result<(), Box<dyn Error>> {
-    let filename = args::parse_args()?;
+    let filename = args::parse_filename()?;
     let content = input::read_input(&filename)?;
 
     let bytes_count = content.len();
