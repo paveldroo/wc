@@ -5,6 +5,9 @@ run:
 lint:
     cargo clippy
 
+test:
+    cargo test --test integration
+
 release:
     cargo build --bin ccwc --release
     cp target/release/ccwc .
@@ -13,9 +16,3 @@ release:
 
 watch:
     cargo watch -q -c -w src/ -x "run -- -c test.txt"
-
-test:
-    cargo test -q quick_dev -- --no-capture
-
-watch-test:
-    cargo watch -q -c -w tests/ -x "test -q quick_dev -- --no-capture"
