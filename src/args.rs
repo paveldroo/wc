@@ -36,8 +36,6 @@ pub fn parse_args() -> Result<Config, Box<dyn Error>> {
         }
     }
 
-    // let filename = filename.ok_or("missing filename as argument")?;
-
     Ok(Config {
         filename: filename.unwrap_or_default(),
         bytes,

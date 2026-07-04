@@ -34,7 +34,7 @@ fn no_filename() {
     cmd.arg("-c");
     cmd.assert()
         .failure()
-        .stderr("ccwc: missing filename as argument\n");
+        .stderr("ccwc: no stdin data and no filename was provided\n");
 }
 
 #[test]
@@ -58,7 +58,7 @@ fn no_args() {
     let mut cmd = cargo_bin_cmd!("ccwc");
     cmd.assert()
         .failure()
-        .stderr("ccwc: missing filename as argument\n");
+        .stderr("ccwc: no stdin data and no filename was provided\n");
 }
 
 #[test]

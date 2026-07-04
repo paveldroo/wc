@@ -1,5 +1,6 @@
 use std::{
-    error::Error, io::{self, IsTerminal, Read},
+    error::Error,
+    io::{self, IsTerminal, Read},
 };
 
 mod args;
@@ -28,7 +29,11 @@ fn run() -> Result<(), Box<dyn Error>> {
         input::read_input(&cfg.filename)?
     };
 
-    let filename_str = format!(" {}", cfg.filename);
+    let filename_str = if cfg.filename.is_empty() {
+        String::new()
+    } else {
+        format!(" {}", cfg.filename)
+    };
 
     if cfg.bytes {
         let bytes_count = content.len();
