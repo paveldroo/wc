@@ -15,7 +15,9 @@ fn main() {
 
 fn run() -> Result<(), Box<dyn Error>> {
     let cfg = args::parse_args()?;
-    let content = if cfg.filename.is_empty() {
+    let content = if let Some(filename) = &cfg.filename {
+        input::read_input(filename)?
+    } else {
         if io::stdin().is_terminal() {
             return Err("missing filename as argument".into());
         }
@@ -24,15 +26,13 @@ fn run() -> Result<(), Box<dyn Error>> {
         if buffer.is_empty() {
             return Err("no stdin data and no filename was provided".into());
         }
-        buffer.to_string()
-    } else {
-        input::read_input(&cfg.filename)?
+        buffer
     };
 
-    let filename_str = if cfg.filename.is_empty() {
-        String::new()
+    let filename_str = if let Some(filename) = &cfg.filename {
+        format!(" {}", filename)
     } else {
-        format!(" {}", cfg.filename)
+        String::new()
     };
 
     if cfg.bytes {

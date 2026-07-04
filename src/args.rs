@@ -1,7 +1,7 @@
 use std::{env, error::Error};
 
 pub struct Config {
-    pub filename: String,
+    pub filename: Option<String>,
     pub bytes: bool,
     pub lines: bool,
     pub words: bool,
@@ -11,24 +11,26 @@ pub struct Config {
 pub fn parse_args() -> Result<Config, Box<dyn Error>> {
     let raw_args: Vec<String> = env::args().collect();
 
-    let mut filename: Option<String> = None;
-    let mut bytes = false;
-    let mut lines = false;
-    let mut words = false;
-    let mut chars = false;
+    let mut cfg = Config {
+        filename: None,
+        bytes: false,
+        lines: false,
+        words: false,
+        chars: false,
+    };
 
     for arg in raw_args.iter().skip(1) {
         match arg.as_str() {
-            "-c" => bytes = true,
-            "-l" => lines = true,
-            "-w" => words = true,
-            "-m" => chars = true,
+            "-c" => cfg.bytes = true,
+            "-l" => cfg.lines = true,
+            "-w" => cfg.words = true,
+            "-m" => cfg.chars = true,
             other => {
                 if other.starts_with('-') || other.is_empty() {
                     return Err(format!("unknown argument `{other}`").into());
                 }
-                if filename.is_none() {
-                    filename = Some(other.to_string());
+                if cfg.filename.is_none() {
+                    cfg.filename = Some(other.to_string());
                 } else {
                     return Err(format!("unknown argument `{other}`").into());
                 }
@@ -36,11 +38,5 @@ pub fn parse_args() -> Result<Config, Box<dyn Error>> {
         }
     }
 
-    Ok(Config {
-        filename: filename.unwrap_or_default(),
-        bytes,
-        lines,
-        words,
-        chars,
-    })
+    Ok(cfg)
 }
