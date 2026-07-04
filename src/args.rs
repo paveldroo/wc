@@ -6,9 +6,10 @@ pub struct Config {
     pub lines: bool,
     pub words: bool,
     pub chars: bool,
+    pub stdin: String,
 }
 
-pub fn parse_args() -> Result<Config, Box<dyn Error>> {
+pub fn parse_args(stdin_buffer: &String) -> Result<Config, Box<dyn Error>> {
     let raw_args: Vec<String> = env::args().collect();
 
     let mut filename: Option<String> = None;
@@ -36,13 +37,16 @@ pub fn parse_args() -> Result<Config, Box<dyn Error>> {
         }
     }
 
-    let filename = filename.ok_or("missing filename as argument")?;
+    if filename.is_none() && stdin_buffer.is_empty() {
+        return Err("missing filename as argument".into());
+    };
 
     Ok(Config {
-        filename,
+        filename: filename.unwrap_or_default(),
         bytes,
         lines,
         words,
         chars,
+        stdin: stdin_buffer.to_string(),
     })
 }
