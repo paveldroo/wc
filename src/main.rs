@@ -15,7 +15,9 @@ fn main() {
 
 fn run() -> Result<(), Box<dyn Error>> {
     let cfg = args::parse_args()?;
+    let mut filename_str = String::new();
     let content = if let Some(filename) = &cfg.filename {
+        filename_str = format!(" {}", filename);
         input::read_input(filename)?
     } else {
         if io::stdin().is_terminal() {
@@ -27,12 +29,6 @@ fn run() -> Result<(), Box<dyn Error>> {
             return Err("no stdin data and no filename was provided".into());
         }
         buffer
-    };
-
-    let filename_str = if let Some(filename) = &cfg.filename {
-        format!(" {}", filename)
-    } else {
-        String::new()
     };
 
     if cfg.bytes {
