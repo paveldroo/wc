@@ -1,40 +1,42 @@
 use std::{env, error::Error};
 
-pub enum Mode {
-    Bytes,
-    Lines,
-}
-
-pub struct Args {
+pub struct Config {
     pub filename: Option<String>,
-    pub mode: Option<Mode>,
+    pub bytes: bool,
+    pub lines: bool,
 }
 
-pub fn parse_args() -> Result<Args, Box<dyn Error>> {
-    let args: Vec<String> = env::args().collect();
-    let mut args_struct = Args{filename: None, mode: None};
-    let mut i = 1;
-    while i < args.len() {
-        match args[i].as_str() {
-            "-c" => {
-                let value = args.get(i + 1).ok_or("missing value for -c")?;
-                args_struct.filename = Some(value.to_string());
-                args_struct.mode = Some(Mode::Bytes);
-                i += 2;
+pub fn parse_args() -> Result<Config, Box<dyn Error>> {
+    let raw_args: Vec<String> = env::args().collect();
+    let mut cfg = Config {
+        filename: None,
+        bytes: false,
+        lines: false,
+    };
+
+    for (idx, arg) in raw_args.iter().enumerate() {
+        if idx == 0 {
+            continue;
+        }
+        match arg.as_str() {
+            "-c" => cfg.bytes = true,
+            "-l" => cfg.lines = true,
+            other => {
+                if other.chars().next().unwrap().to_string() == "-" {
+                    return Err(format!("unknown argument `{other}`").into());
+                }
+                if cfg.filename.is_none() {
+                    cfg.filename = Some(other.to_string());
+                } else {
+                    return Err(format!("unknown argument `{other}`").into());
+                }
             }
-            "-l" => {
-                let value = args.get(i + 1).ok_or("missing value for -l")?;
-                args_struct.filename = Some(value.to_string());
-                args_struct.mode = Some(Mode::Lines);
-                i += 2;
-            }
-            unknown => return Err(format!("unknown argument `{unknown}`").into()),
         }
     }
 
-    if args_struct.filename == None {
-        return Err("missing filename as argument".into())
+    if cfg.filename.is_none() {
+        return Err("missing filename as argument".into());
     }
 
-    Ok(args_struct)
+    Ok(cfg)
 }

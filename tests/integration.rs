@@ -18,7 +18,7 @@ fn lines_count() {
 fn no_filename() {
     let mut cmd = cargo_bin_cmd!("ccwc");
     cmd.arg("-c");
-    cmd.assert().failure().stderr("ccwc: missing value for -c\n");
+    cmd.assert().failure().stderr("ccwc: missing filename as argument\n");
 }
 
 #[test]
