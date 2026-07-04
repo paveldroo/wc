@@ -12,7 +12,7 @@ fn main() {
 
 fn run() -> Result<(), Box<dyn Error>> {
     let cfg = args::parse_args()?;
-    let filename = cfg.filename.unwrap();
+    let filename = cfg.filename;
     let content = input::read_input(&filename)?;
 
     if cfg.bytes {
@@ -20,7 +20,7 @@ fn run() -> Result<(), Box<dyn Error>> {
         println!("  {bytes_count} {filename}");
     } else if cfg.lines {
         let lines_count = content.lines().count();
-        println!("  {lines_count} {filename}")
+        println!("  {lines_count} {filename}");
     }
 
     Ok(())

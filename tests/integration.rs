@@ -18,18 +18,31 @@ fn lines_count() {
 fn no_filename() {
     let mut cmd = cargo_bin_cmd!("ccwc");
     cmd.arg("-c");
-    cmd.assert().failure().stderr("ccwc: missing filename as argument\n");
+    cmd.assert()
+        .failure()
+        .stderr("ccwc: missing filename as argument\n");
+}
+
+#[test]
+fn empty_filename() {
+    let mut cmd = cargo_bin_cmd!("ccwc");
+    cmd.arg("-c").arg("");
+    cmd.assert().failure().stderr("ccwc: unknown argument ``\n");
 }
 
 #[test]
 fn unknown_arg() {
     let mut cmd = cargo_bin_cmd!("ccwc");
     cmd.arg("-d");
-    cmd.assert().failure().stderr("ccwc: unknown argument `-d`\n");
+    cmd.assert()
+        .failure()
+        .stderr("ccwc: unknown argument `-d`\n");
 }
 
 #[test]
 fn no_args() {
     let mut cmd = cargo_bin_cmd!("ccwc");
-    cmd.assert().failure().stderr("ccwc: missing filename as argument\n");
+    cmd.assert()
+        .failure()
+        .stderr("ccwc: missing filename as argument\n");
 }

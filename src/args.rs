@@ -1,32 +1,28 @@
 use std::{env, error::Error};
 
 pub struct Config {
-    pub filename: Option<String>,
+    pub filename: String,
     pub bytes: bool,
     pub lines: bool,
 }
 
 pub fn parse_args() -> Result<Config, Box<dyn Error>> {
     let raw_args: Vec<String> = env::args().collect();
-    let mut cfg = Config {
-        filename: None,
-        bytes: false,
-        lines: false,
-    };
 
-    for (idx, arg) in raw_args.iter().enumerate() {
-        if idx == 0 {
-            continue;
-        }
+    let mut filename: Option<String> = None;
+    let mut bytes = false;
+    let mut lines = false;
+
+    for arg in raw_args.iter().skip(1) {
         match arg.as_str() {
-            "-c" => cfg.bytes = true,
-            "-l" => cfg.lines = true,
+            "-c" => bytes = true,
+            "-l" => lines = true,
             other => {
-                if other.chars().next().unwrap().to_string() == "-" {
+                if other.starts_with('-') || other.is_empty() {
                     return Err(format!("unknown argument `{other}`").into());
                 }
-                if cfg.filename.is_none() {
-                    cfg.filename = Some(other.to_string());
+                if filename.is_none() {
+                    filename = Some(other.to_string());
                 } else {
                     return Err(format!("unknown argument `{other}`").into());
                 }
@@ -34,9 +30,11 @@ pub fn parse_args() -> Result<Config, Box<dyn Error>> {
         }
     }
 
-    if cfg.filename.is_none() {
-        return Err("missing filename as argument".into());
-    }
+    let filename = filename.ok_or("missing filename as argument")?;
 
-    Ok(cfg)
+    Ok(Config {
+        filename,
+        bytes,
+        lines,
+    })
 }

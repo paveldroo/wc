@@ -3,7 +3,8 @@ run:
     cargo run -- -l test.txt
 
 lint:
-    cargo clippy
+    cargo fmt
+    cargo clippy -- -D warnings
 
 test:
     cargo test --test integration
