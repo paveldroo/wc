@@ -1,6 +1,5 @@
 use std::{
-    error::Error,
-    io::{self, Read},
+    error::Error, io::{self, IsTerminal, Read},
 };
 
 mod args;
@@ -14,16 +13,19 @@ fn main() {
 }
 
 fn run() -> Result<(), Box<dyn Error>> {
-    let mut buffer = String::new();
-
-    io::stdin().read_to_string(&mut buffer)?;
-
-    let cfg = args::parse_args(&buffer)?;
-    let mut content = String::new();
-    if !cfg.filename.is_empty() {
-        content = input::read_input(&cfg.filename)?;
-    } else if !cfg.stdin.is_empty() {
-        content = cfg.stdin;
+    let cfg = args::parse_args()?;
+    let content = if cfg.filename.is_empty() {
+        if io::stdin().is_terminal() {
+            return Err("missing filename as argument".into());
+        }
+        let mut buffer = String::new();
+        io::stdin().read_to_string(&mut buffer)?;
+        if buffer.is_empty() {
+            return Err("no stdin data and no filename was provided".into());
+        }
+        buffer.to_string()
+    } else {
+        input::read_input(&cfg.filename)?
     };
 
     let filename_str = format!(" {}", cfg.filename);
