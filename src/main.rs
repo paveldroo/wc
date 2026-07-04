@@ -27,6 +27,11 @@ fn run() -> Result<(), Box<dyn Error>> {
     } else if cfg.chars {
         let chars_count = content.chars().count();
         println!("  {chars_count} {filename}");
+    } else {
+        let lines_count = content.lines().count();
+        let words_count = content.split_whitespace().count();
+        let bytes_count = content.len();
+        println!("  {lines_count} {words_count} {bytes_count} {filename}");
     }
 
     Ok(())

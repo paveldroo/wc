@@ -60,3 +60,21 @@ fn no_args() {
         .failure()
         .stderr("ccwc: missing filename as argument\n");
 }
+
+#[test]
+fn just_filename() {
+    let mut cmd = cargo_bin_cmd!("ccwc");
+    cmd.arg("test.txt");
+    cmd.assert()
+        .success()
+        .stdout("  7145 58164 342190 test.txt\n");
+}
+
+#[test]
+fn just_empty_filename() {
+    let mut cmd = cargo_bin_cmd!("ccwc");
+    cmd.arg("");
+    cmd.assert()
+        .failure()
+        .stderr("ccwc: unknown argument ``\n");
+}
