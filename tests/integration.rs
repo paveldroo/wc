@@ -74,7 +74,5 @@ fn just_filename() {
 fn just_empty_filename() {
     let mut cmd = cargo_bin_cmd!("ccwc");
     cmd.arg("");
-    cmd.assert()
-        .failure()
-        .stderr("ccwc: unknown argument ``\n");
+    cmd.assert().failure().stderr("ccwc: unknown argument ``\n");
 }
