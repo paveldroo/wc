@@ -1,6 +1,6 @@
 # Watch dev files
 run:
-    cargo run -- -c test.txt
+    cargo run -- -l test.txt
 
 lint:
     cargo clippy

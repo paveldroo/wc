@@ -1,10 +1,17 @@
 use assert_cmd::cargo::cargo_bin_cmd;
 
 #[test]
-fn bytes_len() {
+fn bytes_count() {
     let mut cmd = cargo_bin_cmd!("ccwc");
     cmd.arg("-c").arg("test.txt");
     cmd.assert().success().stdout("  342190 test.txt\n");
+}
+
+#[test]
+fn lines_count() {
+    let mut cmd = cargo_bin_cmd!("ccwc");
+    cmd.arg("-l").arg("test.txt");
+    cmd.assert().success().stdout("  7145 test.txt\n");
 }
 
 #[test]
@@ -24,5 +31,5 @@ fn unknown_arg() {
 #[test]
 fn no_args() {
     let mut cmd = cargo_bin_cmd!("ccwc");
-    cmd.assert().failure().stderr("ccwc: missing required argument -c\n");
+    cmd.assert().failure().stderr("ccwc: missing filename as argument\n");
 }

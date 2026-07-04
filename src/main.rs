@@ -11,10 +11,21 @@ fn main() {
 }
 
 fn run() -> Result<(), Box<dyn Error>> {
-    let filename = args::parse_filename()?;
+    let args_struct = args::parse_args()?;
+    let filename = args_struct.filename.unwrap();
     let content = input::read_input(&filename)?;
 
-    let bytes_count = content.len();
-    println!("  {bytes_count} {filename}");
+    match args_struct.mode {
+        Some(args::Mode::Bytes) => {
+            let bytes_count = content.len();
+            println!("  {bytes_count} {filename}");
+        }
+        Some(args::Mode::Lines) => {
+            let lines_count = content.lines().count();
+            println!("  {lines_count} {filename}")
+        },
+        _ => {}
+    }
+
     Ok(())
 }
