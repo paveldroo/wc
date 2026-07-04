@@ -5,6 +5,7 @@ pub struct Config {
     pub bytes: bool,
     pub lines: bool,
     pub words: bool,
+    pub chars: bool,
 }
 
 pub fn parse_args() -> Result<Config, Box<dyn Error>> {
@@ -14,12 +15,14 @@ pub fn parse_args() -> Result<Config, Box<dyn Error>> {
     let mut bytes = false;
     let mut lines = false;
     let mut words = false;
+    let mut chars = false;
 
     for arg in raw_args.iter().skip(1) {
         match arg.as_str() {
             "-c" => bytes = true,
             "-l" => lines = true,
             "-w" => words = true,
+            "-m" => chars = true,
             other => {
                 if other.starts_with('-') || other.is_empty() {
                     return Err(format!("unknown argument `{other}`").into());
@@ -40,5 +43,6 @@ pub fn parse_args() -> Result<Config, Box<dyn Error>> {
         bytes,
         lines,
         words,
+        chars,
     })
 }

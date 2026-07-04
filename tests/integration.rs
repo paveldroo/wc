@@ -22,6 +22,13 @@ fn words_count() {
 }
 
 #[test]
+fn chars_count() {
+    let mut cmd = cargo_bin_cmd!("ccwc");
+    cmd.arg("-m").arg("test.txt");
+    cmd.assert().success().stdout("  339292 test.txt\n");
+}
+
+#[test]
 fn no_filename() {
     let mut cmd = cargo_bin_cmd!("ccwc");
     cmd.arg("-c");

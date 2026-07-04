@@ -1,6 +1,6 @@
 # Watch dev files
 run:
-    cargo run -- -w test.txt
+    cargo run -- -m test.txt
 
 lint:
     cargo fmt
